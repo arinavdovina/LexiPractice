@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Конструктор методически точных промптов для закрепления изученной лексики на языковых занятиях.">
+  <title>LexiPractice — конструктор промптов</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="brand-mark">LP</div>
+        <div>
+          <div class="eyebrow">Конструктор для преподавателей языков</div>
+          <h1>LexiPractice</h1>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button class="btn ghost" id="openHistoryBtn" type="button">История <span id="historyCount" class="count">0</span></button>
+        <button class="btn ghost" id="exportSettingsBtn" type="button">Экспорт настроек</button>
+        <label class="btn ghost file-btn">Импорт<input id="importSettingsInput" type="file" accept="application/json"></label>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <aside class="panel form-panel">
+        <div class="stepper" aria-label="Этапы конструктора">
+          <button class="step active" data-scroll="profileSection"><span>1</span>Профиль</button>
+          <button class="step" data-scroll="vocabSection"><span>2</span>Лексика</button>
+          <button class="step" data-scroll="designSection"><span>3</span>Дизайн</button>
+          <button class="step" data-scroll="formatSection"><span>4</span>Формат</button>
+          <button class="step" data-scroll="resultSection"><span>5</span>Промпт</button>
+        </div>
+
+        <form id="builderForm">
+          <section class="form-section" id="profileSection">
+            <div class="section-heading">
+              <div><span class="section-kicker">Шаг 1</span><h2>Профиль обучающегося</h2></div>
+              <span class="section-badge">обязательно</span>
+            </div>
+            <div class="field-grid two">
+              <label class="field"><span>Изучаемый язык</span><input id="targetLanguage" required value="Английский" placeholder="Например, английский"></label>
+              <label class="field"><span>Язык инструкций ученику</span><select id="instructionLanguage"><option>Изучаемый язык</option><option>Русский</option><option>Двуязычные инструкции</option></select></label>
+              <label class="field"><span>Возраст</span><select id="age"><option>7–9</option><option selected>10–12</option><option>13–17</option><option>18+</option></select></label>
+              <label class="field"><span>Уровень</span><select id="level"><option>Pre-A1</option><option>A1</option><option selected>A2</option><option>B1</option><option>B2</option><option>C1</option><option>C2</option></select></label>
+              <label class="field"><span>Формат занятия</span><select id="lessonMode"><option>Индивидуально</option><option>Пара</option><option>Мини-группа</option><option>Группа</option><option>Самостоятельная работа</option></select></label>
+              <label class="field"><span>Длительность задания</span><select id="duration"><option>5–7 минут</option><option selected>10–15 минут</option><option>20–25 минут</option><option>30–40 минут</option></select></label>
+            </div>
+          </section>
+
+          <section class="form-section" id="vocabSection">
+            <div class="section-heading"><div><span class="section-kicker">Шаг 2</span><h2>Изученная лексика</h2></div><span class="section-badge">вставьте список</span></div>
+            <label class="field"><span>Слова, коллокации, фразовые глаголы или выражения</span><textarea id="vocabulary" required rows="8" placeholder="Каждая единица с новой строки или через запятую. Можно добавить перевод после тире."></textarea><small><b id="vocabCount">0</b> единиц распознано</small></label>
+            <div class="field-grid two">
+              <label class="field"><span>Главная цель</span><select id="goal"><option>Узнавание значения</option><option>Запоминание формы</option><option>Извлечение из памяти</option><option selected>Точное употребление в контексте</option><option>Коллокации и чанки</option><option>Переход в устную речь</option><option>Диагностика усвоения</option></select></label>
+              <label class="field"><span>Количество пунктов</span><select id="itemCount"><option>6</option><option>8</option><option selected>10</option><option>12</option><option>15</option><option>20</option></select></label>
+            </div>
+            <div class="quality-note"><b>Антишаблон ответов включён автоматически.</b><span>Правильные позиции будут распределяться равномерно, без постоянного первого варианта и заметных последовательностей.</span></div>
+            <details class="advanced">
+              <summary>Дополнительные методические настройки</summary>
+              <div class="field-grid two details-grid">
+                <label class="field"><span>Особые трудности</span><input id="difficulties" placeholder="Например, путает похожие слова"></label>
+                <label class="field"><span>Контекст / интересы</span><input id="context" placeholder="Необязательно: спорт, экзамен..."></label>
+                <label class="field"><span>Допустимая новая лексика</span><select id="newLexis"><option selected>Не добавлять новую целевую лексику</option><option>До 5% связующей лексики</option><option>До 10% связующей лексики</option></select></label>
+                <label class="field"><span>Ответы для преподавателя</span><select id="answerKey"><option selected>Без ключей</option><option>Ключи отдельным блоком</option><option>Ключи и краткие пояснения</option></select></label>
+              </div>
+            </details>
+          </section>
+
+          <section class="form-section" id="designSection">
+            <div class="section-heading"><div><span class="section-kicker">Шаг 3</span><h2>Формат результата и стиль</h2></div></div>
+            <div class="field-grid two">
+              <label class="field"><span>Что создать</span><select id="outputType"><option selected>Один готовый рабочий лист</option><option>Блок для рабочей тетради</option><option>Набор карточек</option><option>Задание для презентации</option><option>Интерактивное HTML-задание</option><option>Устная активность без печати</option></select></label>
+              <label class="field"><span>Стиль</span><select id="style"></select></label>
+              <label class="field"><span>Ориентация</span><select id="orientation"><option selected>A4, вертикальная</option><option>A4, горизонтальная</option><option>Экран 16:9</option><option>Карточки 2×3</option></select></label>
+              <label class="field"><span>Цветовой режим</span><select id="colorMode"><option selected>Полноцвет</option><option>Ограниченная палитра</option><option>Чёрно-белый для печати</option></select></label>
+            </div>
+            <div id="stylePreview" class="style-preview"></div>
+          </section>
+        </form>
+      </aside>
+
+      <section class="panel catalog-panel" id="formatSection">
+        <div class="catalog-head">
+          <div><span class="section-kicker">Шаг 4</span><h2>Выберите один формат закрепления</h2><p>650 механик без привязки к теме. Содержание подставляется из вашего списка лексики.</p></div>
+          <button class="btn primary" id="randomBtn" type="button">Случайный подходящий</button>
+        </div>
+
+        <div class="filters">
+          <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Поиск по названию или механике"></label>
+          <select id="categoryFilter"><option value="all">Все категории</option></select>
+          <select id="difficultyFilter"><option value="all">Любая сложность</option><option value="1">Базовая</option><option value="2">Средняя</option><option value="3">Повышенная</option><option value="4">Высокая</option></select>
+          <label class="switch"><input id="excludeUsed" type="checkbox"><span></span>Не показывать использованные</label>
+        </div>
+
+        <div class="catalog-stats">
+          <div><b id="shownCount">650</b> форматов найдено</div>
+          <div class="legend"><span class="dot selected-dot"></span>выбран <span class="dot used-dot"></span>использован</div>
+        </div>
+
+        <div id="categoryChips" class="category-chips"></div>
+        <div id="formatGrid" class="format-grid" aria-live="polite"></div>
+        <div class="pagination"><button class="btn ghost" id="prevPage" type="button">← Назад</button><span id="pageInfo"></span><button class="btn ghost" id="nextPage" type="button">Вперёд →</button></div>
+      </section>
+
+      <section class="panel result-panel" id="resultSection">
+        <div class="result-head">
+          <div><span class="section-kicker">Шаг 5</span><h2>Готовый промпт</h2><p id="selectedSummary">Сначала выберите формат из каталога.</p></div>
+          <button class="btn primary large" id="generateBtn" type="button">Собрать промпт</button>
+        </div>
+        <div id="validationMessage" class="validation-message" hidden></div>
+        <div class="prompt-wrap">
+          <textarea id="promptOutput" spellcheck="false" placeholder="Здесь появится подробный методический промпт..."></textarea>
+          <div class="prompt-actions">
+            <button class="btn secondary" id="copyBtn" type="button">Копировать</button>
+            <button class="btn ghost" id="downloadBtn" type="button">Скачать .txt</button>
+            <button class="btn ghost" id="clearBtn" type="button">Очистить</button>
+          </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="formatDialog" class="dialog">
+    <button class="dialog-close" id="closeDialogBtn" aria-label="Закрыть">×</button>
+    <div id="dialogContent"></div>
+  </dialog>
+
+  <dialog id="historyDialog" class="dialog history-dialog">
+    <button class="dialog-close" id="closeHistoryBtn" aria-label="Закрыть">×</button>
+    <div class="dialog-title"><span class="section-kicker">Личный кабинет</span><h2>История промптов</h2><p>Сохраняется только в этом браузере.</p></div>
+    <div id="historyList" class="history-list"></div>
+    <button class="btn danger" id="clearHistoryBtn" type="button">Очистить историю</button>
+  </dialog>
+
+  <div id="toast" class="toast" role="status"></div>
+
+  <script src="formats.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
